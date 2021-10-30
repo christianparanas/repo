@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { sign } = require("jsonwebtoken");
+const { sign, verify } = require("jsonwebtoken");
 
 // model
 const { Users } = require("../models");
@@ -88,3 +88,26 @@ exports.adminLogin = async (req, res) => {
   });
 };
 
+exports.profile = async (req, res) => {
+  const uJwtToken = req.header("uJwtToken");
+
+  const decodedJwt = await verify(uJwtToken, process.env.JWT_SECRET);
+
+  if (!decodedJwt) return res.json(decodedJwt);
+
+  Users.findByPk(decodedJwt.id, {
+    attributes: {
+      exclude: ["password"],
+    },
+  })
+    .then((data) => {
+      if(!data) return res.status(404).json('User does not exist!')
+
+      res.json(data)
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: `Error retrieving profile data : ${err}`,
+      });
+    });
+};

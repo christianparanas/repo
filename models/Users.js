@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true
     },
+    image: {
+      type: DataTypes.STRING,
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -29,6 +32,8 @@ module.exports = (sequelize, DataTypes) => {
 
   Users.associate = models => {
     Users.hasMany(models.Carts)
+
+    Users.hasOne(models.Stores)
   }
   
 

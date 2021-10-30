@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // routes
-app.use("/api/auth", userRouter);
+app.use("/api", userRouter);
 app.use("/api/products", productRouter);
 
 db.sequelize.sync({ force: true }).then(() => {

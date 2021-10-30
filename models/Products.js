@@ -30,6 +30,12 @@ module.exports = (sequelize, DataTypes) => {
 
   Products.associate = models => {
     Products.hasMany(models.Carts)
+
+    Products.belongsTo(models.Stores, {
+      foreignKey: {
+        allowNull: false
+      }
+    })
   }
 
   return Products;
