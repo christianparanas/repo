@@ -6,9 +6,6 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const db = require("./models");
-const Role = db.role;
-
 const { userRouter, productRouter } = require("./routes");
 
 app.use(cors());
