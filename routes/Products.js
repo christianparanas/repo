@@ -7,6 +7,7 @@ const {
   searchProduct,
   updateProduct,
   deleteProduct,
+  addProduct
 } = require("../controllers/Products");
 
 // middleware
@@ -18,10 +19,13 @@ router.get("/", getAllProducts);
 // get single products
 router.get("/:id", searchProduct);
 
+router.post('/', addProduct)
+
 // update product
 router.patch("/:id", validateJWT, updateProduct);
 
 // delete product
 router.delete("/:id", validateJWT, deleteProduct);
+
 
 module.exports = router;
