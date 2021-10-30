@@ -18,7 +18,7 @@ exports.register = async (req, res) => {
 
       res.status(201).json({message: "Account created!"});
     } catch (err) {
-      res.status(403).json({message: err.errors[0].message});
+      res.status(403).json({message: "Email already in use!" });
     }
   });
 };
