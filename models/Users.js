@@ -19,9 +19,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   }, {
     underscored: true
   });
+
+  Users.associate = models => {
+    Users.hasMany(models.Carts)
+  }
   
 
   return Users;

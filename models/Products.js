@@ -1,5 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
   const Products = sequelize.define("Products", {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false
@@ -21,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
   });
+
+  Products.associate = models => {
+    Products.hasMany(models.Carts)
+  }
 
   return Products;
 };

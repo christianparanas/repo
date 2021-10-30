@@ -7,8 +7,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const db = require("./models");
-const userRouter = require("./routes/Users");
-const productRouter = require("./routes/Products");
+const Role = db.role;
+
+const { userRouter, productRouter } = require("./routes");
 
 app.use(cors());
 app.use(express.json());
@@ -18,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", userRouter);
 app.use("/api/products", productRouter);
 
-db.sequelize.sync().then(() => {
+db.sequelize.sync({ force: true }).then(() => {
   app.listen(PORT, () => {
     console.log(`Server is running on Port: ${PORT}`);
   });
