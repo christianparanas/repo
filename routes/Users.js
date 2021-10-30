@@ -12,14 +12,14 @@ const {
   profile,
 } = require("../controllers/Users");
 
-router.post("/register", register);
-router.post("/login", login);
+router.post("/auth/register", register);
+router.post("/auth/login", login);
 
 router.get("/profile", validateJWT, profile);
 
 
 // admin
-router.post("/admin/register", adminRegister);
-router.post("/admin/login", adminLogin);
+router.post("/admin/auth/register", adminRegister);
+router.post("/admin/auth/login", adminLogin);
 
 module.exports = router;

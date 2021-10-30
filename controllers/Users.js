@@ -16,9 +16,9 @@ exports.register = async (req, res) => {
         role: "user",
       });
 
-      res.status(201).json(user);
+      res.status(201).json({message: "Account created!"});
     } catch (err) {
-      res.status(403).json(err.errors[0].message);
+      res.status(403).json({message: err.errors[0].message});
     }
   });
 };
@@ -28,10 +28,10 @@ exports.login = async (req, res) => {
 
   const user = await Users.findOne({ where: { email: email } });
 
-  if (!user) return res.status(401).json("Invalid Email or Password");
+  if (!user) return res.status(401).json({message: "Invalid Email or Password"});
 
   bcrypt.compare(password, user.password).then((match) => {
-    if (!match) res.status(401).json("Invalid Email or Password");
+    if (!match) return res.status(401).json({message: "Invalid Email or Password"});
 
     // generate jwt
     const token = sign(
@@ -42,7 +42,7 @@ exports.login = async (req, res) => {
       { expiresIn: "5h" }
     );
 
-    res.status(200).json(token);
+    res.status(200).json({token: token, message: "Logging In!"});
   });
 };
 
@@ -101,9 +101,9 @@ exports.profile = async (req, res) => {
     },
   })
     .then((data) => {
-      if(!data) return res.status(404).json('User does not exist!')
+      if (!data) return res.status(404).json("User does not exist!");
 
-      res.json(data)
+      res.json(data);
     })
     .catch((err) => {
       res.status(500).send({

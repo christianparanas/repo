@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     image: {
       type: DataTypes.STRING,
+      allowNull: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -26,16 +27,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   }, {
     underscored: true
   });
 
   Users.associate = models => {
     Users.hasMany(models.Carts)
-
     Users.hasOne(models.Stores)
   }
-  
 
   return Users;
 };
