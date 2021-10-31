@@ -2,19 +2,27 @@ const bcrypt = require("bcrypt");
 const { sign, verify } = require("jsonwebtoken");
 
 // model
-const { Users } = require("../models");
+const db = require("../models");
 
 exports.register = async (req, res) => {
   const { name, email, password } = req.body;
 
   bcrypt.hash(password, 10).then(async (hashedPassword) => {
     try {
-      const user = await Users.create({
+
+      // store user data
+      const user = await db.Users.create({
         name: name,
         email: email,
         password: hashedPassword,
         role: "user",
-      });
+      })
+
+      // create store for the user
+      const store = await db.Stores.create({
+        store_name: '_' + Math.random().toString(36).substr(2, 9),
+        UserId: user.id
+      })
 
       res.status(201).json({message: "Account created!"});
     } catch (err) {
@@ -26,7 +34,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await Users.findOne({ where: { email: email } });
+  const user = await db.Users.findOne({ where: { email: email } });
 
   if (!user) return res.status(401).json({message: "Invalid Email or Password"});
 
@@ -51,7 +59,7 @@ exports.adminRegister = async (req, res) => {
 
   bcrypt.hash(password, 10).then(async (hashedPassword) => {
     try {
-      const user = await Users.create({
+      const user = await db.Users.create({
         name: name,
         email: email,
         password: hashedPassword,
@@ -68,7 +76,7 @@ exports.adminRegister = async (req, res) => {
 exports.adminLogin = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await Users.findOne({ where: { email: email } });
+  const user = await db.Users.findOne({ where: { email: email } });
 
   if (!user) return res.status(401).json("Invalid Email or Password");
 
@@ -95,7 +103,7 @@ exports.profile = async (req, res) => {
 
   if (!decodedJwt) return res.json(decodedJwt);
 
-  Users.findByPk(decodedJwt.id, {
+  db.Users.findByPk(decodedJwt.id, {
     attributes: {
       exclude: ["password"],
     },
