@@ -17,9 +17,9 @@ const { validateJWT } = require("../middlewares/AuthMiddleware");
 router.get("/", getAllProducts);
 
 // get single products
-router.get("/:id", searchProduct);
+router.get("/:query", searchProduct);
 
-router.post('/', addProduct)
+router.post('/', validateJWT, addProduct)
 
 // update product
 router.patch("/:id", validateJWT, updateProduct);

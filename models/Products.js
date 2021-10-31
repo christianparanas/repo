@@ -6,24 +6,28 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
-    name: {
+    product_name: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    description: {
+    product_description: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    image: {
+    product_image: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    price: {
+    product_price: {
       type: DataTypes.DECIMAL(10,2),
       allowNull: false
     },
-    quantity: {
+    product_quantity: {
       type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    product_category: {
+      type: DataTypes.STRING,
       allowNull: false
     },
   });
