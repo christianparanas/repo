@@ -7,7 +7,8 @@ const {
   searchProduct,
   updateProduct,
   deleteProduct,
-  addProduct
+  addProduct,
+  getProduct
 } = require("../controllers/Products");
 
 // middleware
@@ -16,8 +17,8 @@ const { validateJWT } = require("../middlewares/AuthMiddleware");
 // get all products
 router.get("/", getAllProducts);
 
-// get single products
-router.get("/:query", searchProduct);
+router.get("/:product_id", getProduct)
+
 
 router.post('/', validateJWT, addProduct)
 

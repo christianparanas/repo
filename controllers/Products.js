@@ -2,8 +2,26 @@ const { sign, verify } = require("jsonwebtoken");
 const db = require("../models");
 
 const getAllProducts = (req, res) => {
-  res.json("Products");
+  db.Products.findAll().then((response) => {
+    res.status(200).json(response);
+  })
+  .catch(err => {
+    res.json(err)
+  })
 };
+
+const getProduct = (req, res) => {
+  const product_id = req.params.product_id
+
+  db.Products.findByPk(product_id, {
+    include: [db.Stores]
+  }).then((response) => {
+    res.status(200).json(response)
+  })
+  .catch((err) => {
+    res.json(err)
+  })
+}
 
 const searchProduct = (req, res) => {
   res.json(req.params.query);
@@ -31,7 +49,6 @@ const addProduct = async (req, res) => {
       } catch (err) {
         return res.json({ err });
       }
-
     })
     .catch((err) => {
       return res.json("lo");
@@ -52,4 +69,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   addProduct,
+  getProduct
 };
