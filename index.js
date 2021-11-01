@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 const db = require('./models')
 
-const { userRouter, productRouter } = require("./routes");
+const { userRouter, productRouter, storeRouter } = require("./routes");
 
 app.use(cors());
 app.use(express.json());
@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 // routes
 app.use("/api", userRouter);
 app.use("/api/products", productRouter);
+app.use("/api/stores", storeRouter);
 
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
