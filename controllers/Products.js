@@ -51,7 +51,7 @@ const addProduct = async (req, res) => {
       }
     })
     .catch((err) => {
-      return res.json("lo");
+      return res.json(err);
     });
 };
 
