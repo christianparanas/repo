@@ -7,7 +7,10 @@ exports.getAllProducts = async (req, res) => {
   const decodedJwt = await verify(uJwtToken, process.env.JWT_SECRET);
   if (!decodedJwt) return res.json(decodedJwt);
 
-  db.Stores.findOne({ where: { UserId: decodedJwt.id }, include: [db.Products], })
+  db.Stores.findOne({
+    where: { UserId: decodedJwt.id },
+    include: [db.Products],
+  })
     .then((data) => {
       res.status(200).json(data);
     })
@@ -15,3 +18,5 @@ exports.getAllProducts = async (req, res) => {
       res.json(err);
     });
 };
+
+
