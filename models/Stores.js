@@ -4,7 +4,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    image: {
+    store_image: {
+      type: DataTypes.STRING,
+    },
+    store_address: {
       type: DataTypes.STRING,
     },
   });

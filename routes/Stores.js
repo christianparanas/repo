@@ -4,9 +4,11 @@ const router = express.Router();
 // middleware
 const { validateJWT } = require("../middlewares/AuthMiddleware");
 
-const { getAllProducts } = require("../controllers/Stores")
+const { getAllProducts, updateStoreDetails } = require("../controllers/Stores")
 
-router.get('/', validateJWT, getAllProducts)
+router.get('/products', validateJWT, getAllProducts)
+
+router.patch('/updateDetails', validateJWT, updateStoreDetails)
 
 
 module.exports =  router
