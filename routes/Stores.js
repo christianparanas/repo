@@ -5,9 +5,17 @@ const router = express.Router();
 const { validateJWT } = require("../middlewares/AuthMiddleware");
 
 // controllers
-const { getAllProducts, updateStoreDetails } = require("../controllers/Stores");
+const {
+  getUserStoreData,
+  getStoreData,
+  userStoreUpdateDetails,
+} = require("../controllers/Stores");
 
-router.get("/products", validateJWT, getAllProducts);
-router.patch("/updateDetails", validateJWT, updateStoreDetails);
+// public routes
+router.get("/store/:storeId", getStoreData);
+
+// protected routes
+router.get("/userstore", validateJWT, getUserStoreData);
+router.patch("/updateDetails", validateJWT, userStoreUpdateDetails);
 
 module.exports = router;

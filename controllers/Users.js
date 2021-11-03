@@ -69,6 +69,7 @@ exports.profile = async (req, res) => {
     attributes: {
       exclude: ["password"],
     },
+    include: [db.Stores]
   })
     .then((data) => {
 

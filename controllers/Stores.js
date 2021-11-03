@@ -11,7 +11,7 @@ exports.getAllStores = (req, res) => {
     })
 }
 
-exports.getAllProducts = async (req, res) => {
+exports.getUserStoreData = async (req, res) => {
   const uJwtToken = req.header("uJwtToken");
 
   const decodedJwt = await verify(uJwtToken, process.env.JWT_SECRET);
@@ -29,9 +29,22 @@ exports.getAllProducts = async (req, res) => {
     });
 };
 
-exports.updateStoreDetails =  async (req, res) => {
-  console.log(req.body)
+exports.getStoreData = async (req, res) => {
+  const storeId = req.params.storeId
 
+  db.Stores.findOne({
+    where: { id: storeId },
+    include: [db.Products],
+  })
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+};
+
+exports.userStoreUpdateDetails =  async (req, res) => {
   const uJwtToken = req.header("uJwtToken");
 
   const decodedJwt = await verify(uJwtToken, process.env.JWT_SECRET);
