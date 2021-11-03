@@ -7,7 +7,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const db = require('./models')
-
 const { userRouter, productRouter, storeRouter } = require("./routes");
 
 app.use(cors());

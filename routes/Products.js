@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-// controller
+// controllers
 const {
   getAllProducts,
   searchProduct,
@@ -11,21 +11,17 @@ const {
   getProduct
 } = require("../controllers/Products");
 
-// middleware
+// middlewares
 const { validateJWT } = require("../middlewares/AuthMiddleware");
 
-// get all products
+// public routes
 router.get("/", getAllProducts);
-
+router.get("/search/:query", searchProduct)
 router.get("/:product_id", getProduct)
 
-
+// protected routes
 router.post('/', validateJWT, addProduct)
-
-// update product
 router.patch("/:id", validateJWT, updateProduct);
-
-// delete product
 router.delete("/:id", validateJWT, deleteProduct);
 
 

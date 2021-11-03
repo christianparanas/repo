@@ -1,30 +1,29 @@
 const { sign, verify } = require("jsonwebtoken");
+const { Op } = require("sequelize");
 const db = require("../models");
 
 const getAllProducts = (req, res) => {
-  db.Products.findAll().then((response) => {
-    res.status(200).json(response);
-  })
-  .catch(err => {
-    res.json(err)
-  })
+  db.Products.findAll()
+    .then((response) => {
+      res.status(200).json(response);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
 };
 
 const getProduct = (req, res) => {
-  const product_id = req.params.product_id
+  const product_id = req.params.product_id;
 
   db.Products.findByPk(product_id, {
-    include: [db.Stores]
-  }).then((response) => {
-    res.status(200).json(response)
+    include: [db.Stores],
   })
-  .catch((err) => {
-    res.json(err)
-  })
-}
-
-const searchProduct = (req, res) => {
-  res.json(req.params.query);
+    .then((response) => {
+      res.status(200).json(response);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
 };
 
 const addProduct = async (req, res) => {
@@ -55,6 +54,31 @@ const addProduct = async (req, res) => {
     });
 };
 
+const searchProduct = (req, res) => {
+  db.Products.findAll({
+    where: {
+      [Op.or]: [
+        {
+          product_name: {
+            [Op.like]: `%${req.params.query}%`,
+          }
+        },
+        {
+          product_description: {
+            [Op.like]: `%${req.params.query}%`,
+          }
+        }
+      ],
+    },
+  })
+    .then((response) => {
+      res.json(response);
+    })
+    .catch((error) => {
+      res.json(error);
+    });
+};
+
 const updateProduct = (req, res) => {
   res.json(req.params.id);
 };
@@ -69,5 +93,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   addProduct,
-  getProduct
+  getProduct,
 };

@@ -1,14 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-// middleware
+// middlewares
 const { validateJWT } = require("../middlewares/AuthMiddleware");
 
-const { getAllProducts, updateStoreDetails } = require("../controllers/Stores")
+// controllers
+const { getAllProducts, updateStoreDetails } = require("../controllers/Stores");
 
-router.get('/products', validateJWT, getAllProducts)
+router.get("/products", validateJWT, getAllProducts);
+router.patch("/updateDetails", validateJWT, updateStoreDetails);
 
-router.patch('/updateDetails', validateJWT, updateStoreDetails)
-
-
-module.exports =  router
+module.exports = router;
