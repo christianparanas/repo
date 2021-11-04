@@ -1,7 +1,7 @@
 const { sign, verify } = require("jsonwebtoken");
 const db = require("../models");
 
-const { decodeJWT } = require('../utils/decodeJwt')
+const { decodeJWT } = require('../utils/func')
 
 exports.getAllStores = (req, res) => {
   db.Stores.findAll()

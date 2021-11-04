@@ -2,10 +2,21 @@ const { sign, verify } = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const db = require("../models");
 
-const { decodeJWT } = require("../utils/decodeJwt");
+const { decodeJWT, getStoreId } = require("../utils/func")
 
-const getAllProducts = (req, res) => {
-  db.Products.findAll()
+const getAllProducts = async (req, res) => {
+  const decodedJwt = await decodeJWT(req.header("uJwtToken"));
+
+  // get store id by user id from interceptor
+  const storeId = await getStoreId(decodedJwt.id)
+
+  db.Products.findAll({
+    where: {
+      StoreId: {
+        [Op.ne]: storeId,
+      },
+    }
+  })
     .then((response) => {
       res.status(200).json(response);
     })
@@ -55,18 +66,7 @@ const searchProduct = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
   // get store id by user id from interceptor
-
-  const storeId = await db.Stores.findOne({
-    where: {
-      UserId: decodedJwt.id || "thea",
-    },
-  })
-    .then((data) => {
-      return data ? data.dataValues.id : 'taba' ;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  const storeId = await getStoreId(decodedJwt.id)
 
   db.Products.findAll({
     where: {

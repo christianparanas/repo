@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const { sign, verify } = require("jsonwebtoken");
 
-const { decodeJWT } = require('../utils/decodeJwt')
+const { decodeJWT } = require('../utils/func')
 
 // model
 const db = require("../models");
