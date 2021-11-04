@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const { sign, verify } = require("jsonwebtoken");
 
+const { decodeJWT } = require('../utils/decodeJwt')
+
 // model
 const db = require("../models");
 
@@ -55,13 +57,7 @@ exports.login = async (req, res) => {
 };
 
 exports.profile = async (req, res) => {
-  // get the jwt from the request headers
-  const uJwtToken = req.header("uJwtToken");
-
-  // decode jwt
-  const decodedJwt = await verify(uJwtToken, process.env.JWT_SECRET);
-
-  if (!decodedJwt) return res.json(decodedJwt);
+  const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
   db.Users.findByPk(decodedJwt.id, {
 

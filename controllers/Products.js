@@ -2,6 +2,8 @@ const { sign, verify } = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const db = require("../models");
 
+const { decodeJWT } = require("../utils/decodeJwt");
+
 const getAllProducts = (req, res) => {
   db.Products.findAll()
     .then((response) => {
@@ -27,12 +29,7 @@ const getProduct = (req, res) => {
 };
 
 const addProduct = async (req, res) => {
-  // get jwt from headers, that has been passed by the interceptor
-  const uJwtToken = req.header("uJwtToken");
-
-  // verify and decode the jwt to get the user id, the user id is needed to continue the process below
-  const decodedJwt = await verify(uJwtToken, process.env.JWT_SECRET);
-  if (!decodedJwt) return res.json(decodedJwt);
+  const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
   // retrive store id by user id
   db.Stores.findOne({ where: { UserId: decodedJwt.id } })
@@ -54,20 +51,46 @@ const addProduct = async (req, res) => {
     });
 };
 
-const searchProduct = (req, res) => {
+const searchProduct = async (req, res) => {
+  const decodedJwt = await decodeJWT(req.header("uJwtToken"));
+
+  // get store id by user id from interceptor
+
+  const storeId = await db.Stores.findOne({
+    where: {
+      UserId: decodedJwt.id || "thea",
+    },
+  })
+    .then((data) => {
+      return data ? data.dataValues.id : 'taba' ;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
   db.Products.findAll({
     where: {
-      [Op.or]: [
+      [Op.and]: [
         {
-          product_name: {
-            [Op.like]: `%${req.params.query}%`,
-          }
+          // filter search result - exclude, current user store products
+          StoreId: {
+            [Op.ne]: storeId,
+          },
         },
         {
-          product_description: {
-            [Op.like]: `%${req.params.query}%`,
-          }
-        }
+          [Op.or]: [
+            {
+              product_name: {
+                [Op.like]: `%${req.params.query}%`,
+              },
+            },
+            {
+              product_description: {
+                [Op.like]: `%${req.params.query}%`,
+              },
+            },
+          ],
+        },
       ],
     },
   })

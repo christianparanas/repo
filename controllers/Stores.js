@@ -1,6 +1,8 @@
 const { sign, verify } = require("jsonwebtoken");
 const db = require("../models");
 
+const { decodeJWT } = require('../utils/decodeJwt')
+
 exports.getAllStores = (req, res) => {
   db.Stores.findAll()
     .then(data => {
@@ -12,10 +14,7 @@ exports.getAllStores = (req, res) => {
 }
 
 exports.getUserStoreData = async (req, res) => {
-  const uJwtToken = req.header("uJwtToken");
-
-  const decodedJwt = await verify(uJwtToken, process.env.JWT_SECRET);
-  if (!decodedJwt) return res.json(decodedJwt);
+  const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
   db.Stores.findOne({
     where: { UserId: decodedJwt.id },
@@ -45,10 +44,7 @@ exports.getStoreData = async (req, res) => {
 };
 
 exports.userStoreUpdateDetails =  async (req, res) => {
-  const uJwtToken = req.header("uJwtToken");
-
-  const decodedJwt = await verify(uJwtToken, process.env.JWT_SECRET);
-  if (!decodedJwt) return res.json(decodedJwt);
+  const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
   db.Stores.update(
     {
