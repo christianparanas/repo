@@ -1,10 +1,22 @@
 const { sign, verify } = require("jsonwebtoken");
+const { Op } = require("sequelize");
 const db = require("../models");
 
-const { decodeJWT } = require('../utils/func')
+const { decodeJWT, getStoreId } = require('../utils/func')
 
-exports.getAllStores = (req, res) => {
-  db.Stores.findAll()
+exports.getStores = async (req, res) => {
+  const decodedJwt = await decodeJWT(req.header("uJwtToken"));
+
+  // get store id by user id from interceptor
+  const storeId = await getStoreId(decodedJwt.id)
+
+  db.Stores.findAll({
+    where: {
+      id: {
+        [Op.ne]: storeId,
+      },
+    }
+  })
     .then(data => {
       res.status(200).json(data)
     })

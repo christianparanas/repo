@@ -6,12 +6,14 @@ const { validateJWT } = require("../middlewares/AuthMiddleware");
 
 // controllers
 const {
+  getStores,
   getUserStoreData,
   getStoreData,
   userStoreUpdateDetails,
 } = require("../controllers/Stores");
 
 // public routes
+router.get('/', getStores)
 router.get("/store/:storeId", getStoreData);
 
 // protected routes
