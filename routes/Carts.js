@@ -8,6 +8,6 @@ const { addToCart, removeFromCart, getCartItems } = require("../controllers/Cart
 
 router.get('/', validateJWT, getCartItems)
 router.post("/", validateJWT, addToCart);
-router.delete("/", validateJWT, removeFromCart);
+router.delete("/:cartId", validateJWT, removeFromCart);
 
 module.exports = router;
