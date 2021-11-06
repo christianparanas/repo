@@ -60,3 +60,41 @@ exports.removeFromCart = async (req, res) => {
       res.json(error);
     });
 };
+
+exports.reduceQtyCartItem = async (req, res) => {
+  const decodedJwt = await decodeJWT(req.header("uJwtToken"));
+
+  db.Carts.findOne({
+    where: {
+      [Op.and]: [{ id: req.body.cartId }, { UserId: decodedJwt.id }],
+    },
+  })
+  .then(response => {
+    return response.decrement('quantity')
+  }) 
+  .then(response => {
+    res.json(response)
+  })
+  .catch(error => {
+    res.json(error)
+  })
+}
+
+exports.increaseQtyCartItem = async (req, res) => {
+  const decodedJwt = await decodeJWT(req.header("uJwtToken"));
+
+  db.Carts.findOne({
+    where: {
+      [Op.and]: [{ id: req.body.cartId }, { UserId: decodedJwt.id }],
+    },
+  })
+  .then(response => {
+    return response.increment('quantity')
+  }) 
+  .then(response => {
+    res.json(response)
+  })
+  .catch(error => {
+    res.json(error)
+  })
+}
