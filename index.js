@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 const db = require('./models')
 
 // admin routers
-const { adminProducts, adminUsers } = require("./routes/admin")
+const { adminProducts, adminUsers, adminAuth } = require("./routes/admin")
 
 // user routers
 const { usersRouter, productsRouter, storesRouter, cartsRouter } = require("./routes");
@@ -25,6 +25,7 @@ app.use("/api/stores", storesRouter);
 app.use("/api/carts", cartsRouter);
 
 // admin routes
+app.use("/api/admin/auth", adminAuth)
 app.use("/api/admin/products", adminProducts)
 app.use("/api/admin/users", adminUsers)
 

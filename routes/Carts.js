@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 // middlewares
-const { validateJWT } = require("../middlewares/AuthMiddleware");
+const { userValidateJWT } = require("../middlewares/AuthMiddleware");
 
 const {
   addToCart,
@@ -12,10 +12,10 @@ const {
   increaseQtyCartItem,
 } = require("../controllers/Carts");
 
-router.get("/", validateJWT, getCartItems);
-router.post("/", validateJWT, addToCart);
-router.delete("/:cartId", validateJWT, removeFromCart);
-router.post("/inc", validateJWT, increaseQtyCartItem);
-router.post("/dec", validateJWT, reduceQtyCartItem);
+router.get("/", userValidateJWT, getCartItems);
+router.post("/", userValidateJWT, addToCart);
+router.delete("/:cartId", userValidateJWT, removeFromCart);
+router.post("/inc", userValidateJWT, increaseQtyCartItem);
+router.post("/dec", userValidateJWT, reduceQtyCartItem);
 
 module.exports = router;

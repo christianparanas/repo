@@ -12,7 +12,7 @@ const {
 } = require("../controllers/Products");
 
 // middlewares
-const { validateJWT } = require("../middlewares/AuthMiddleware");
+const { userValidateJWT } = require("../middlewares/AuthMiddleware");
 
 // public routes
 router.get("/", getAllProducts);
@@ -20,9 +20,9 @@ router.get("/search/:query", searchProduct)
 router.get("/:product_id", getProduct)
 
 // protected routes
-router.post('/', validateJWT, addProduct)
-router.patch("/:id", validateJWT, updateProduct);
-router.delete("/:id", validateJWT, deleteProduct);
+router.post('/', userValidateJWT, addProduct)
+router.patch("/:id", userValidateJWT, updateProduct);
+router.delete("/:id", userValidateJWT, deleteProduct);
 
 
 module.exports = router;
