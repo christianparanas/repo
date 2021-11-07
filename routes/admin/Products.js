@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const { isAdmin } = require("../../middlewares/AuthMiddleware")
+const { adminValidateJWT } = require("../../middlewares/AuthMiddleware")
 const { getProducts } = require("../../controllers/admin/Products")
 
 
-router.get("/", getProducts)
+router.get("/", adminValidateJWT, getProducts)
 
 
 module.exports = router

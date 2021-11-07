@@ -25,7 +25,9 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await db.Users.findOne({ where: { email: email, role: "admin" } });
+  const user = await db.Users.findOne({
+    where: { email: email, role: "admin" },
+  });
   if (!user)
     return res.status(401).json({ message: "Invalid Email or Password" });
 
@@ -38,7 +40,7 @@ exports.login = async (req, res) => {
       {
         id: user.id,
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET_AD,
       { expiresIn: "5h" }
     );
 
