@@ -16,6 +16,7 @@ exports.register = async (req, res) => {
 
       res.status(201).json(user);
     } catch (err) {
+      console.log(err);
       res.status(403).json(err.errors[0].message);
     }
   });
@@ -24,22 +25,23 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await db.Users.findOne({ where: { email: email } });
-
-  if (!user) return res.status(401).json("Invalid Email or Password");
+  const user = await db.Users.findOne({ where: { email: email, role: "admin" } });
+  if (!user)
+    return res.status(401).json({ message: "Invalid Email or Password" });
 
   bcrypt.compare(password, user.password).then((match) => {
-    if (!match) res.status(401).json("Invalid Email or Password");
+    if (!match)
+      return res.status(401).json({ message: "Invalid Email or Password" });
 
     // generate jwt
     const token = sign(
       {
         id: user.id,
       },
-      process.env.JWT_SECRET_AD,
+      process.env.JWT_SECRET,
       { expiresIn: "5h" }
     );
 
-    res.status(200).json(token);
+    res.status(200).json({ token: token, message: "Logged In!" });
   });
 };
