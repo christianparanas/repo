@@ -54,7 +54,7 @@ exports.removeFromCart = async (req, res) => {
     },
   })
     .then((response) => {
-      res.status(200).json({ message: "Cart item removed" });
+      res.status(200).json({ message: "Cart item removed", response });
     })
     .catch((error) => {
       res.json(error);
