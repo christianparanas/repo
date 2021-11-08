@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     product_price: {
-      type: DataTypes.DECIMAL(10,2),
+      type: DataTypes.FLOAT(10,2),
       allowNull: false
     },
     product_quantity: {
