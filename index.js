@@ -8,21 +8,22 @@ const PORT = process.env.PORT || 3000;
 
 const db = require('./models')
 
-// admin routers
+// admin routers import
 const { adminProducts, adminUsers, adminAuth } = require("./routes/admin")
 
-// user routers
-const { usersRouter, productsRouter, storesRouter, cartsRouter } = require("./routes");
+// user routers import
+const { usersRouter, productsRouter, storesRouter, cartsRouter, ordersRouter } = require("./routes");
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// routes
+// user routes
 app.use("/api", usersRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/stores", storesRouter);
 app.use("/api/carts", cartsRouter);
+app.use("/api/orders", ordersRouter);
 
 // admin routes
 app.use("/api/admin/auth", adminAuth)
