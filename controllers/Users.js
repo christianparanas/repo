@@ -80,3 +80,20 @@ exports.profile = async (req, res) => {
       });
     });
 };
+
+exports.userUpdateDetails = async (req, res) => {
+  const decodedJwt = await decodeJWT(req.header("uJwtToken"));
+
+  db.Users.update(
+    {
+      ...req.body
+    },
+    { where: { id: decodedJwt.id } }
+  )
+  .then(response => {
+    res.status(200).json("Updated!")
+  })
+  .catch(err => {
+    res.json(err)
+  })
+}
