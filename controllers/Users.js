@@ -7,7 +7,7 @@ const { decodeJWT } = require('../utils/func')
 const db = require("../models");
 
 exports.register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, address, password } = req.body;
 
   bcrypt.hash(password, 10).then(async (hashedPassword) => {
     try {
@@ -15,6 +15,7 @@ exports.register = async (req, res) => {
       const user = await db.Users.create({
         name: name,
         email: email,
+        address: address,
         password: hashedPassword,
         role: "user",
       });
