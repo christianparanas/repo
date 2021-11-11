@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const { getCheckoutItemsData } = require("../controllers/Orders");
+const { getCheckoutItemsData, placeOrder } = require("../controllers/Orders");
+
+router.post("/", placeOrder)
 
 router.post("/itemsdetails", getCheckoutItemsData);
 
