@@ -21,10 +21,11 @@ exports.placeOrder = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
+      shipping_rates: shippingCarrier == "Entrego" ? ['shr_1JubAqAQGMDqUKAgUzcusfhS'] : ['shr_1Jub97AQGMDqUKAgwRI2bIyw'],
       line_items: orderItems.map((item) => {
         return {
           price_data: {
-            currency: "usd",
+            currency: "php",
             product_data: {
               name: item.produtName,
             },
