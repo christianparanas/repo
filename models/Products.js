@@ -34,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Products.associate = models => {
     Products.hasMany(models.Carts)
+    Products.hasMany(models.Order_item)
     Products.belongsTo(models.Stores)
   }
 

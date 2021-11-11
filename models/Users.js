@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Users.associate = models => {
     Users.hasMany(models.Carts)
+    Users.hasMany(models.Orders)
     Users.hasOne(models.Stores)
   }
 
