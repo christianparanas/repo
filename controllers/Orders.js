@@ -17,29 +17,18 @@ exports.placeOrder = async (req, res) => {
     orderItems,
   } = req.body;
 
-  const storeItems = new Map([
-    [1, { priceInCents: 1000, name: "React" }],
-    [2, { priceInCents: 2000, name: "Vue" }],
-  ]);
-
-  const items = [
-    { id: 1, quantity: 3 },
-    { id: 2, quantity: 5 },
-  ];
-
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
-      line_items: items.map((item) => {
-        const storeItem = storeItems.get(item.id);
+      line_items: orderItems.map((item) => {
         return {
           price_data: {
             currency: "usd",
             product_data: {
-              name: storeItem.name,
+              name: item.produtName,
             },
-            unit_amount: storeItem.priceInCents,
+            unit_amount: parseInt(item.price + '00'),
           },
           quantity: item.quantity,
         };
