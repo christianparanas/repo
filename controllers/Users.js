@@ -98,3 +98,12 @@ exports.userUpdateDetails = async (req, res) => {
     res.json(err)
   })
 }
+
+
+exports.forgotpassword = async (req, res) => {
+  res.send("Forgot Password")
+}
+
+exports.resetpassword = async (req, res) => {
+  res.send("Reset Password")
+}

@@ -11,9 +11,7 @@ const { decodeJWT, getStoreId } = require("../utils/func");
 exports.placeOrder = async (req, res) => {
   const {
     shippingCarrier,
-    shippingPrice,
     payingMethod,
-    totalPayment,
     orderItems,
   } = req.body;
 

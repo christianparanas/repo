@@ -8,12 +8,17 @@ const {
   register,
   login,
   profile,
-  userUpdateDetails
+  userUpdateDetails,
+  forgotpassword,
+  resetpassword
 } = require("../controllers/Users");
 
 router.post("/auth/register", register);
 router.post("/auth/login", login);
+router.post("/auth/forgotpassword", forgotpassword);
+router.get("/auth/resetpassword/:resetToken", resetpassword);
 router.get("/profile", userValidateJWT, profile);
+
 router.patch("/updatedetails", userValidateJWT, userUpdateDetails);
 
 
