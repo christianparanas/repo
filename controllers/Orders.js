@@ -73,7 +73,7 @@ exports.placeOrder = async (req, res) => {
             quantity: item.quantity,
           };
         }),
-        success_url: "https://shoppiee.vercel.app/checkout/payment",
+        success_url: "https://shoppiee.vercel.app/checkout/success",
         cancel_url: "https://shoppiee.vercel.app/cart",
       });
 
