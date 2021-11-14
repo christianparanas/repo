@@ -56,7 +56,12 @@ exports.placeOrder = async (req, res) => {
               res.json(err);
             });
           });
+
+          orderItems.map(async (item) => {
+            db.Products.decrement('product_quantity', { by: item.quantity, where: { id: item.productId }})
+          })
         }
+
 
         res.status(201).json({ message: "Order Placed Successfully!" });
       })
@@ -121,6 +126,11 @@ exports.placeOrder = async (req, res) => {
               res.json(err);
             });
           });
+
+          // subtract product_quantity based on the order quantity
+          orderItems.map(async (item) => {
+            db.Products.decrement('product_quantity', { by: item.quantity, where: { id: item.productId }})
+          })
         }
       })
       .catch((err) => {

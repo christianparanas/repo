@@ -48,11 +48,7 @@ exports.addToCart = async (req, res) => {
 exports.removeFromCart = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
-  db.Carts.destroy({
-    where: {
-      [Op.and]: [{ id: req.params.cartId }, { UserId: decodedJwt.id }],
-    },
-  })
+  db.Carts.destroy({ where: { id: req.params.cartId, UserId: decodedJwt.id }})
     .then((response) => {
       res.status(200).json({ message: "Cart item removed", response });
     })
@@ -64,14 +60,7 @@ exports.removeFromCart = async (req, res) => {
 exports.reduceQtyCartItem = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
-  db.Carts.findOne({
-    where: {
-      [Op.and]: [{ id: req.body.cartId }, { UserId: decodedJwt.id }],
-    },
-  })
-  .then(response => {
-    return response.decrement('quantity')
-  }) 
+  db.Carts.decrement("quantity", { by: 1, where: { id: req.body.cartId, UserId: decodedJwt.id }})
   .then(response => {
     res.json(response)
   })
@@ -83,14 +72,7 @@ exports.reduceQtyCartItem = async (req, res) => {
 exports.increaseQtyCartItem = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
-  db.Carts.findOne({
-    where: {
-      [Op.and]: [{ id: req.body.cartId }, { UserId: decodedJwt.id }],
-    },
-  })
-  .then(response => {
-    return response.increment('quantity')
-  }) 
+  db.Carts.increment("quantity", { by: 1, where: { id: req.body.cartId, UserId: decodedJwt.id }})
   .then(response => {
     res.json(response)
   })
