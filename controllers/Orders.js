@@ -6,13 +6,13 @@ const db = require("../models");
 
 const stripe = require("stripe")(process.env.STRP_KEY);
 
-const { decodeJWT, getStoreId } = require("../utils/func");
+const { decodeJWT } = require("../utils/func");
 
 
 exports.getOrders = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
-  db.Orders.findAll({ where: { UserId: decodedJwt.id } })
+  db.Orders.findAll({ where: { UserId: decodedJwt.id }, include: [ {model: db.Order_item, include: [db.Products]}] })
   .then((response) => {
     res.status(200).json(response)
   })
