@@ -8,6 +8,17 @@ const stripe = require("stripe")(process.env.STRP_KEY);
 
 const { decodeJWT, getStoreId } = require("../utils/func");
 
+
+exports.getOrders = async (req, res) => {
+  const decodedJwt = await decodeJWT(req.header("uJwtToken"));
+
+  db.Orders.findAll({ where: { UserId: decodedJwt.id } })
+  .then((response) => {
+    res.status(200).json(response)
+  })
+}
+
+
 exports.placeOrder = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
@@ -116,10 +127,4 @@ exports.placeOrder = async (req, res) => {
         res.json(err);
       });
   }
-};
-
-exports.getCheckoutItemsData = (req, res) => {
-  console.log(req.body);
-
-  res.json(req.body);
 };
