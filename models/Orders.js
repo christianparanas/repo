@@ -7,24 +7,24 @@ module.exports = (sequelize, DataTypes) => {
     },
     order_shipping_courier: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     order_payment_method: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     order_totalpayment: {
-      type: DataTypes.FLOAT(10,2),
-      allowNull: false
+      type: DataTypes.FLOAT(10, 2),
+      allowNull: false,
     },
     order_status: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
   });
 
   Orders.associate = (models) => {
-    Orders.belongsTo(models.Users)
+    Orders.belongsTo(models.Users);
     Orders.hasMany(models.Order_item);
   };
 
