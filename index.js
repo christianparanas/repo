@@ -6,13 +6,24 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const db = require('./models')
+const db = require("./models");
 
 // admin routers import
-const { adminProducts, adminUsers, adminAuth } = require("./routes/admin")
+const {
+  adminProductsRouter,
+  adminOrdersRouter,
+  adminUsersRouter,
+  adminAuthRouter,
+} = require("./routes/admin");
 
 // user routers import
-const { usersRouter, productsRouter, storesRouter, cartsRouter, ordersRouter } = require("./routes");
+const {
+  usersRouter,
+  productsRouter,
+  storesRouter,
+  cartsRouter,
+  ordersRouter,
+} = require("./routes");
 
 app.use(cors());
 app.use(express.json());
@@ -26,9 +37,10 @@ app.use("/api/carts", cartsRouter);
 app.use("/api/orders", ordersRouter);
 
 // admin routes
-app.use("/api/admin/auth", adminAuth)
-app.use("/api/admin/products", adminProducts)
-app.use("/api/admin/users", adminUsers)
+app.use("/api/admin/auth", adminAuthRouter);
+app.use("/api/admin/products", adminProductsRouter);
+app.use("/api/admin/users", adminUsersRouter);
+app.use("/api/admin/orders", adminOrdersRouter);
 
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
