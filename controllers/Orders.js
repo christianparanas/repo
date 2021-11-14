@@ -81,6 +81,40 @@ exports.placeOrder = async (req, res) => {
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
+
+    db.Orders.create({
+      order_shipping_courier: shippingCarrier,
+      order_payment_method: payingMethod,
+      order_totalpayment: totalPayment,
+      UserId: decodedJwt.id,
+      order_status: "Paid",
+    })
+      .then((response) => {
+        if (response) {
+          // store order items details to order_item table
+          orderItems.map(async (item) => {
+            db.Order_item.create({
+              quantity: item.quantity,
+              OrderId: response.id,
+              ProductId: item.productId,
+            }).catch((err) => {
+              res.json(err);
+            });
+          });
+
+          // remove cart items if already placed
+          orderItems.map(async (item) => {
+            db.Carts.destroy({
+              where: { ProductId: item.productId, UserId: decodedJwt.id },
+            }).catch((err) => {
+              res.json(err);
+            });
+          });
+        }
+      })
+      .catch((err) => {
+        res.json(err);
+      });
   }
 };
 
