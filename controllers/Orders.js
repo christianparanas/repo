@@ -1,23 +1,22 @@
 const { sign, verify } = require("jsonwebtoken");
 const { Op } = require("sequelize");
+const stripe = require("stripe")(process.env.STRP_KEY);
 
 // import models
 const db = require("../models");
 
-const stripe = require("stripe")(process.env.STRP_KEY);
-
 const { decodeJWT } = require("../utils/func");
-
 
 exports.getOrders = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
-  db.Orders.findAll({ where: { UserId: decodedJwt.id }, include: [ {model: db.Order_item, include: [db.Products]}] })
-  .then((response) => {
-    res.status(200).json(response)
-  })
-}
-
+  db.Orders.findAll({
+    where: { UserId: decodedJwt.id },
+    include: [{ model: db.Order_item, include: [db.Products] }],
+  }).then((response) => {
+    res.status(200).json(response);
+  });
+};
 
 exports.placeOrder = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
@@ -58,10 +57,12 @@ exports.placeOrder = async (req, res) => {
           });
 
           orderItems.map(async (item) => {
-            db.Products.decrement('product_quantity', { by: item.quantity, where: { id: item.productId }})
-          })
+            db.Products.decrement("product_quantity", {
+              by: item.quantity,
+              where: { id: item.productId },
+            });
+          });
         }
-
 
         res.status(201).json({ message: "Order Placed Successfully!" });
       })
@@ -129,8 +130,11 @@ exports.placeOrder = async (req, res) => {
 
           // subtract product_quantity based on the order quantity
           orderItems.map(async (item) => {
-            db.Products.decrement('product_quantity', { by: item.quantity, where: { id: item.productId }})
-          })
+            db.Products.decrement("product_quantity", {
+              by: item.quantity,
+              where: { id: item.productId },
+            });
+          });
         }
       })
       .catch((err) => {

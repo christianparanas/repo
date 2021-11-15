@@ -2,20 +2,20 @@ const { sign, verify } = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const db = require("../models");
 
-const { decodeJWT, getStoreId } = require("../utils/func")
+const { decodeJWT, getStoreId } = require("../utils/func");
 
-const getAllProducts = async (req, res) => {
+exports.getAllProducts = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
   // get store id by user id from interceptor
-  const storeId = await getStoreId(decodedJwt.id)
+  const storeId = await getStoreId(decodedJwt.id);
 
   db.Products.findAll({
     where: {
       StoreId: {
         [Op.ne]: storeId,
       },
-    }
+    },
   })
     .then((response) => {
       res.status(200).json(response);
@@ -25,7 +25,7 @@ const getAllProducts = async (req, res) => {
     });
 };
 
-const getProduct = (req, res) => {
+exports.getProduct = (req, res) => {
   const product_id = req.params.product_id;
 
   db.Products.findByPk(product_id, {
@@ -39,7 +39,7 @@ const getProduct = (req, res) => {
     });
 };
 
-const addProduct = async (req, res) => {
+exports.addProduct = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
   // retrive store id by user id
@@ -62,11 +62,11 @@ const addProduct = async (req, res) => {
     });
 };
 
-const searchProduct = async (req, res) => {
+exports.searchProduct = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
   // get store id by user id from interceptor
-  const storeId = await getStoreId(decodedJwt.id)
+  const storeId = await getStoreId(decodedJwt.id);
 
   db.Products.findAll({
     where: {
@@ -102,19 +102,48 @@ const searchProduct = async (req, res) => {
     });
 };
 
-const updateProduct = (req, res) => {
-  res.json(req.params.id);
-};
 
-const deleteProduct = (req, res) => {
-  res.json(req.params.id);
-};
+exports.discoverProducts = async (req, res) => {
+  const decodedJwt = await decodeJWT(req.header("uJwtToken"));
+  const storeId = await getStoreId(decodedJwt.id);
 
-module.exports = {
-  getAllProducts,
-  searchProduct,
-  updateProduct,
-  deleteProduct,
-  addProduct,
-  getProduct,
+  db.Products.findAll({
+    order: [
+      ["createdAt", "DESC"]
+    ],
+    limit: parseInt(req.query.limit),
+    where: {
+      StoreId: {
+        [Op.ne]: storeId,
+      },
+    },
+  })
+    .then((response) => {
+      res.json(response);
+    })
+    .catch((error) => {
+      res.json(error);
+    });  
+}
+
+exports.newProducts = async (req, res) => {
+  const decodedJwt = await decodeJWT(req.header("uJwtToken"));
+  const storeId = await getStoreId(decodedJwt.id);
+
+  db.Products.findAll({
+    order: [
+      ["createdAt", "DESC"]
+    ],
+    where: {
+      StoreId: {
+        [Op.ne]: storeId,
+      },
+    },
+  })
+    .then((response) => {
+      res.json(response);
+    })
+    .catch((error) => {
+      res.json(error);
+    });
 };

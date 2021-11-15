@@ -5,10 +5,10 @@ const router = express.Router();
 const {
   getAllProducts,
   searchProduct,
-  updateProduct,
-  deleteProduct,
   addProduct,
-  getProduct
+  getProduct,
+  newProducts,
+  discoverProducts,
 } = require("../controllers/Products");
 
 // middlewares
@@ -16,13 +16,12 @@ const { userValidateJWT } = require("../middlewares/AuthMiddleware");
 
 // public routes
 router.get("/", getAllProducts);
-router.get("/search/:query", searchProduct)
-router.get("/:product_id", getProduct)
+router.get("/new", newProducts);
+router.get("/discover", discoverProducts);
+router.get("/search/:query", searchProduct);
+router.get("/:product_id", getProduct);
 
 // protected routes
-router.post('/', userValidateJWT, addProduct)
-router.patch("/:id", userValidateJWT, updateProduct);
-router.delete("/:id", userValidateJWT, deleteProduct);
-
+router.post("/", userValidateJWT, addProduct);
 
 module.exports = router;
