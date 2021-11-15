@@ -15,6 +15,9 @@ exports.getAllProducts = async (req, res) => {
       StoreId: {
         [Op.ne]: storeId,
       },
+      product_quantity: {
+        [Op.ne]: 0,
+      },
     },
   })
     .then((response) => {
@@ -77,6 +80,9 @@ exports.searchProduct = async (req, res) => {
           StoreId: {
             [Op.ne]: storeId,
           },
+          product_quantity: {
+            [Op.ne]: 0,
+          },
         },
         {
           [Op.or]: [
@@ -117,6 +123,9 @@ exports.discoverProducts = async (req, res) => {
       StoreId: {
         [Op.ne]: storeId,
       },
+      product_quantity: {
+        [Op.ne]: 0,
+      },
     },
   })
     .then((response) => {
@@ -138,6 +147,9 @@ exports.newProducts = async (req, res) => {
     where: {
       StoreId: {
         [Op.ne]: storeId,
+      },
+      product_quantity: {
+        [Op.ne]: 0,
       },
     },
   })

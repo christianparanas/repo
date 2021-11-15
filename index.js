@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 const db = require("./models");
 
 // seeders import
-const seedCategoriesTable = require("./seeders/Categories")
+const seedCategoriesTable = require("./seeders/Categories");
 
 // admin routers import
 const {
@@ -26,7 +26,7 @@ const {
   storesRouter,
   cartsRouter,
   ordersRouter,
-  categoriesRouter
+  categoriesRouter,
 } = require("./routes");
 
 app.use(cors());
