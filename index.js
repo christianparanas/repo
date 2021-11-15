@@ -8,6 +8,9 @@ const PORT = process.env.PORT || 3000;
 
 const db = require("./models");
 
+// seeders import
+const seedCategoriesTable = require("./seeders/Categories")
+
 // admin routers import
 const {
   adminProductsRouter,
@@ -23,6 +26,7 @@ const {
   storesRouter,
   cartsRouter,
   ordersRouter,
+  categoriesRouter
 } = require("./routes");
 
 app.use(cors());
@@ -33,6 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api", usersRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/stores", storesRouter);
+app.use("/api/categories", categoriesRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/orders", ordersRouter);
 
@@ -46,4 +51,7 @@ db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log(`Server is running on Port: ${PORT}`);
   });
+
+  // seed
+  // seedCategoriesTable()
 });

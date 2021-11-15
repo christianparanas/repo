@@ -49,6 +49,7 @@ exports.addProduct = async (req, res) => {
       try {
         db.Products.create({
           StoreId: data.dataValues.id,
+          CategoryId: req.body.CategoryId,
           ...req.body,
         });
 

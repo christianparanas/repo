@@ -8,35 +8,32 @@ module.exports = (sequelize, DataTypes) => {
     },
     product_name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     product_description: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     product_image: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     product_price: {
-      type: DataTypes.FLOAT(10,2),
-      allowNull: false
+      type: DataTypes.FLOAT(10, 2),
+      allowNull: false,
     },
     product_quantity: {
       type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    product_category: {
-      type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
   });
 
-  Products.associate = models => {
-    Products.hasMany(models.Carts)
-    Products.hasMany(models.Order_item)
-    Products.belongsTo(models.Stores)
-  }
+  Products.associate = (models) => {
+    Products.hasMany(models.Carts);
+    Products.hasMany(models.Order_item);
+    Products.belongsTo(models.Stores);
+    Products.belongsTo(models.Categories);
+  };
 
   return Products;
 };
