@@ -2,28 +2,28 @@ const { sign, verify } = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const db = require("../models");
 
-const { decodeJWT, getStoreId } = require('../utils/func')
+const { decodeJWT, getStoreId } = require("../utils/func");
 
 exports.getStores = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
   // get store id by user id from interceptor
-  const storeId = await getStoreId(decodedJwt.id)
+  const storeId = await getStoreId(decodedJwt.id);
 
   db.Stores.findAll({
     where: {
       id: {
         [Op.ne]: storeId,
       },
-    }
+    },
   })
-    .then(data => {
-      res.status(200).json(data)
+    .then((data) => {
+      res.status(200).json(data);
     })
-    .catch(err => {
-      res.json(err)
-    })
-}
+    .catch((err) => {
+      res.json(err);
+    });
+};
 
 exports.getUserStoreData = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
@@ -41,11 +41,20 @@ exports.getUserStoreData = async (req, res) => {
 };
 
 exports.getStoreData = async (req, res) => {
-  const storeId = req.params.storeId
+  const storeId = req.params.storeId;
 
   db.Stores.findOne({
     where: { id: storeId },
-    include: [db.Products],
+    include: [
+      {
+        model: db.Products,
+        where: {
+          product_quantity: {
+            [Op.ne]: 0,
+          },
+        },
+      },
+    ],
   })
     .then((data) => {
       res.status(200).json(data);
@@ -55,21 +64,19 @@ exports.getStoreData = async (req, res) => {
     });
 };
 
-exports.userStoreUpdateDetails =  async (req, res) => {
+exports.userStoreUpdateDetails = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
   db.Stores.update(
     {
-      ...req.body
+      ...req.body,
     },
     { where: { UserId: decodedJwt.id } }
   )
-  .then(response => {
-    res.status(200).json("Updated!")
-  })
-  .catch(err => {
-    res.json(err)
-  })
-}
-
-
+    .then((response) => {
+      res.status(200).json("Updated!");
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+};
