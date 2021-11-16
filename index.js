@@ -4,11 +4,13 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 const app = express();
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3000;
 
 const db = require("./models");
 
 // seeders import
+// eslint-disable-next-line no-unused-vars
 const seedCategoriesTable = require("./seeders/Categories");
 
 // admin routers import

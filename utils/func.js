@@ -1,4 +1,4 @@
-const { sign, verify } = require("jsonwebtoken");
+const { verify } = require("jsonwebtoken");
 const db = require("../models");
 
 exports.decodeJWT = async (token) => {
@@ -7,12 +7,10 @@ exports.decodeJWT = async (token) => {
   if (token == "chand") {
     result = false;
   } else {
-    const decodedJwt = await verify(token, process.env.JWT_SECRET);
-    if (!decodedJwt) return res.json(decodedJwt);
 
+    const decodedJwt = verify(token, process.env.JWT_SECRET);
     result = decodedJwt;
   }
-
   return result;
 };
 

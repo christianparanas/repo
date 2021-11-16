@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { sign, verify } = require("jsonwebtoken");
+const { sign } = require("jsonwebtoken");
 
 const { decodeJWT } = require('../utils/func')
 
@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
       });
 
       // create store for the user
-      const store = await db.Stores.create({
+      await db.Stores.create({
         store_name: "_" + Math.random().toString(36).substr(2, 9),
         UserId: user.id,
       });
@@ -49,6 +49,7 @@ exports.login = async (req, res) => {
       {
         id: user.id,
       },
+      // eslint-disable-next-line no-undef
       process.env.JWT_SECRET,
       { expiresIn: "5h" }
     );

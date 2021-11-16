@@ -1,8 +1,7 @@
-const { sign, verify } = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const db = require("../models");
 
-const { decodeJWT, getStoreId } = require("../utils/func");
+const { decodeJWT } = require("../utils/func");
 
 exports.getCartItems = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
@@ -35,7 +34,7 @@ exports.addToCart = async (req, res) => {
       UserId: decodedJwt.id,
     })
       .then((response) => {
-        res.status(201).json({ message: "Added to cart" });
+        res.status(201).json({ message: "Added to cart", response });
       })
       .catch((error) => {
         res.json(error);
@@ -48,7 +47,7 @@ exports.addToCart = async (req, res) => {
 exports.removeFromCart = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
-  db.Carts.destroy({ where: { id: req.params.cartId, UserId: decodedJwt.id }})
+  db.Carts.destroy({ where: { id: req.params.cartId, UserId: decodedJwt.id } })
     .then((response) => {
       res.status(200).json({ message: "Cart item removed", response });
     })
@@ -60,23 +59,29 @@ exports.removeFromCart = async (req, res) => {
 exports.reduceQtyCartItem = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
-  db.Carts.decrement("quantity", { by: 1, where: { id: req.body.cartId, UserId: decodedJwt.id }})
-  .then(response => {
-    res.json(response)
+  db.Carts.decrement("quantity", {
+    by: 1,
+    where: { id: req.body.cartId, UserId: decodedJwt.id },
   })
-  .catch(error => {
-    res.json(error)
-  })
-}
+    .then((response) => {
+      res.json(response);
+    })
+    .catch((error) => {
+      res.json(error);
+    });
+};
 
 exports.increaseQtyCartItem = async (req, res) => {
   const decodedJwt = await decodeJWT(req.header("uJwtToken"));
 
-  db.Carts.increment("quantity", { by: 1, where: { id: req.body.cartId, UserId: decodedJwt.id }})
-  .then(response => {
-    res.json(response)
+  db.Carts.increment("quantity", {
+    by: 1,
+    where: { id: req.body.cartId, UserId: decodedJwt.id },
   })
-  .catch(error => {
-    res.json(error)
-  })
-}
+    .then((response) => {
+      res.json(response);
+    })
+    .catch((error) => {
+      res.json(error);
+    });
+};
