@@ -45,16 +45,15 @@ exports.getStoreData = async (req, res) => {
 
   db.Stores.findOne({
     where: { id: storeId },
-    include: [
-      {
-        model: db.Products,
-        where: {
-          product_quantity: {
-            [Op.ne]: 0,
-          },
+    include: {
+      model: db.Products,
+      required: false,
+      where: {
+        product_quantity: {
+          [Op.ne]: 0,
         },
       },
-    ],
+    },
   })
     .then((data) => {
       res.status(200).json(data);
