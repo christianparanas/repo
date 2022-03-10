@@ -144,6 +144,7 @@ exports.newProducts = async (req, res) => {
     order: [
       ["createdAt", "DESC"]
     ],
+    limit: 7,
     where: {
       StoreId: {
         [Op.ne]: storeId,
